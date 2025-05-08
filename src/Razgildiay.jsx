@@ -13,7 +13,7 @@ const RANK_VALUES = {
 const MIN_PLAYERS = 4;
 const MAX_PLAYERS = 9;
 
-const Razgildiay = () => {
+const Razgildiay = ({ playersCount = 4, difficulty = 'medium', isAIGame = false, onBackToMenu }) => {
   // Состояния игры
   const [gameStage, setGameStage] = useState(1); // 1 - пасьянс, 2 - классическая игра
   const [deck, setDeck] = useState([]);
@@ -24,7 +24,28 @@ const Razgildiay = () => {
   const [gameMessage, setGameMessage] = useState('');
   const [gameStarted, setGameStarted] = useState(false);
   const [isDefending, setIsDefending] = useState(false);
-  const [playersCount, setPlayersCount] = useState(4);
+  const [gameOver, setGameOver] = useState(false);
+  const [winner, setWinner] = useState(null);
+  
+  // При изменении параметров игры, сбрасываем игру
+  useEffect(() => {
+    resetGame();
+  }, [playersCount, difficulty, isAIGame]);
+  
+  // Сброс игры
+  const resetGame = () => {
+    setGameStage(1);
+    setDeck([]);
+    setPlayers([]);
+    setCurrentPlayerIndex(0);
+    setTableCards([]);
+    setTrumpCard(null);
+    setGameMessage('');
+    setGameStarted(false);
+    setIsDefending(false);
+    setGameOver(false);
+    setWinner(null);
+  };
   
   // Инициализация игры
   const initializeGame = () => {
@@ -49,6 +70,7 @@ const Razgildiay = () => {
         hand: [],
         stumps: [],
         isBot: i !== 0,
+        difficulty: i !== 0 ? getAiDifficulty(i) : null,
       });
     }
     
@@ -81,6 +103,25 @@ const Razgildiay = () => {
     // Отправляем данные в Telegram
     WebApp.MainButton.hide();
     WebApp.MainButton.setText('');
+  };
+  
+  // Определение сложности ИИ для бота
+  const getAiDifficulty = (botIndex) => {
+    if (!isAIGame) return 'normal';
+    
+    // Если это игра против ИИ с указанной сложностью
+    switch (difficulty) {
+      case 'easy':
+        return 'easy';
+      case 'hard':
+        return 'hard';
+      case 'medium':
+      default:
+        // Делаем случайную сложность для разных ботов
+        const difficulties = ['easy', 'medium', 'hard'];
+        const randomIndex = Math.floor(Math.random() * difficulties.length);
+        return difficulties[randomIndex];
+    }
   };
   
   // Перемешивание массива (алгоритм Фишера-Йейтса)
@@ -436,6 +477,8 @@ const Razgildiay = () => {
       // Игра закончена, остался один игрок
       setGameMessage(`Игра окончена! ${activePlayers[0].name} проиграл!`);
       setGameStarted(false);
+      setGameOver(true);
+      setWinner(activePlayers[0].id);
       
       // Настраиваем кнопку Telegram для новой игры
       WebApp.MainButton.setText('Новая игра');
@@ -574,6 +617,13 @@ const Razgildiay = () => {
     return { left: `calc(50% + ${x}px)`, top: `calc(50% + ${y}px)` };
   };
   
+  // Функция для кнопки возврата в меню
+  const handleBackToMenu = () => {
+    if (onBackToMenu) {
+      onBackToMenu();
+    }
+  };
+
   return (
     <div className="razgildiay-container">
       <div className="game-header">
@@ -581,6 +631,8 @@ const Razgildiay = () => {
         <div className="game-info">
           <p>Стадия: {gameStage === 1 ? 'Пасьянс' : 'Классическая игра'}</p>
           {trumpCard && <p>Козырь: {trumpCard.rank}{trumpCard.suit}</p>}
+          <p>Игроков: {playersCount}</p>
+          {isAIGame && <p>Сложность: {difficulty}</p>}
         </div>
       </div>
       
@@ -588,17 +640,14 @@ const Razgildiay = () => {
       
       {!gameStarted ? (
         <div className="game-controls">
-          <div className="players-select">
-            <label>Количество игроков:</label>
-            <select
-              value={playersCount}
-              onChange={e => setPlayersCount(Number(e.target.value))}
-            >
-              {Array.from({ length: MAX_PLAYERS - MIN_PLAYERS + 1 }, (_, i) => MIN_PLAYERS + i).map(n => (
-                <option key={n} value={n}>{n}</option>
-              ))}
-            </select>
-          </div>
+          <button className="btn-start" onClick={initializeGame}>Начать игру</button>
+          <button className="btn-back" onClick={handleBackToMenu}>Вернуться в меню</button>
+        </div>
+      ) : gameOver ? (
+        <div className="game-controls">
+          <h2>{winner === 0 ? "Поздравляем! Вы выиграли!" : "Игра окончена. Вы проиграли!"}</h2>
+          <button className="btn-start" onClick={resetGame}>Начать заново</button>
+          <button className="btn-back" onClick={handleBackToMenu}>Вернуться в меню</button>
         </div>
       ) : (
         <div className="game-board">
@@ -685,6 +734,11 @@ const Razgildiay = () => {
                 </div>
               );
             })}
+          </div>
+          
+          {/* Кнопка возврата в меню */}
+          <div className="game-controls" style={{ marginTop: '2rem', textAlign: 'center' }}>
+            <button className="btn-back" onClick={handleBackToMenu}>Вернуться в меню</button>
           </div>
         </div>
       )}

@@ -1,3 +1,67 @@
+/* Основные переменные CSS с rgba значениями */
+:root {
+  --accent-color-rgb: 126, 203, 255; /* #7ecbff */
+  --accent-hover-rgb: 106, 184, 240; /* #6ab8f0 */
+}
+
+/* Общие стили для всего приложения */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Roboto', 'Segoe UI', Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+  color: var(--text-color);
+}
+
+.app-container {
+  width: 100%;
+  min-height: 100vh;
+  background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+  overflow-x: hidden;
+}
+
+/* Адаптивные стили */
+@media (max-width: 768px) {
+  body {
+    font-size: 14px;
+  }
+}
+
+/* Общие стили для элементов управления */
+button {
+  font-family: 'Roboto', 'Segoe UI', Arial, sans-serif;
+  cursor: pointer;
+}
+
+input, select {
+  font-family: 'Roboto', 'Segoe UI', Arial, sans-serif;
+}
+
+/* Стили для скроллбара */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(var(--bg-gradient-end-rgb), 0.2);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--accent-color);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-hover);
+}
+
 #root {
   max-width: 1280px;
   margin: 0 auto;

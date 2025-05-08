@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { WebApp } from '@twa-dev/sdk';
-import Razgildiay from './Razgildiay';
+import App from './App';
 import './styles/game2.css';
 
 const TwaApp = () => {
@@ -50,7 +50,7 @@ const TwaApp = () => {
 
   return (
     <div className="twa-container">
-      <Razgildiay />
+      <App />
     </div>
   );
 };
