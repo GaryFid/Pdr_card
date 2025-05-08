@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { WebApp } from '@twa-dev/sdk';
 import Razgildiay from './Razgildiay';
-import './game2.css';
+import './styles/game2.css';
 
 const TwaApp = () => {
   useEffect(() => {

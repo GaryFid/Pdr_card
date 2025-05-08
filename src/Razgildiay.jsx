@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { WebApp } from '@twa-dev/sdk';
-import './game2.css';
+import './styles/game2.css';
 
 // Константы для карт
 const RANKS = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
