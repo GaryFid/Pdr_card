@@ -1,5 +1,53 @@
+/* CSS переменные для темизации */
+:root {
+  /* Светлая тема по умолчанию */
+  --text-color: #2a4d7a;
+  --card-bg: #eaf3ff;
+  --card-border: #b3cfff;
+  --accent-color: #7ecbff;
+  --accent-hover: #6ab8f0;
+  --button-border: #b3cfff;
+  --button-text: #2a4d7a;
+  --button-hover-bg: rgba(179, 207, 255, 0.2);
+  --danger-color: #ff6464;
+  --bg-gradient-start: #e0eaff;
+  --bg-gradient-end: #b3cfff;
+}
+
+/* Темная тема */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text-color: #e0eaff;
+    --card-bg: #2a364b;
+    --card-border: #3a4d7a;
+    --accent-color: #7ecbff;
+    --accent-hover: #6ab8f0;
+    --button-border: #3a4d7a;
+    --button-text: #e0eaff;
+    --button-hover-bg: rgba(100, 108, 255, 0.2);
+    --danger-color: #ff6464;
+    --bg-gradient-start: #1a2234;
+    --bg-gradient-end: #2a364b;
+  }
+}
+
+/* Класс для явной установки темной темы */
+[data-theme="dark"] {
+  --text-color: #e0eaff;
+  --card-bg: #2a364b;
+  --card-border: #3a4d7a;
+  --accent-color: #7ecbff;
+  --accent-hover: #6ab8f0;
+  --button-border: #3a4d7a;
+  --button-text: #e0eaff;
+  --button-hover-bg: rgba(100, 108, 255, 0.2);
+  --danger-color: #ff6464;
+  --bg-gradient-start: #1a2234;
+  --bg-gradient-end: #2a364b;
+}
+
 body, .razgildiay-container {
-  background: linear-gradient(135deg, #e0eaff 0%, #b3cfff 100%);
+  background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
   min-height: 100vh;
 }
 
