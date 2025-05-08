@@ -1,0 +1,619 @@
+body, .razgildiay-container {
+  background: linear-gradient(135deg, #e0eaff 0%, #b3cfff 100%);
+  min-height: 100vh;
+}
+
+.razgildiay-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem;
+  color: var(--text-color);
+}
+
+.game-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--card-border);
+  padding-bottom: 1rem;
+}
+
+.game-header h1 {
+  margin: 0;
+  font-size: 2rem;
+}
+
+.game-info {
+  display: flex;
+  gap: 1rem;
+}
+
+.game-info p {
+  margin: 0;
+  font-size: 1rem;
+  background: var(--card-bg);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+}
+
+.game-message {
+  background: var(--card-bg);
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  min-height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+}
+
+/* Игровое поле */
+.game-board {
+  position: relative;
+  display: grid;
+  grid-template-areas:
+    "opponent2 . opponent3"
+    ". table ."
+    "player controls player-controls";
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: auto auto auto;
+  gap: 1.5rem;
+  margin: 0 auto;
+  max-width: 900px;
+  min-height: 600px;
+}
+
+/* Контейнер со столом в центре */
+.table {
+  grid-area: table;
+  background: var(--card-bg);
+  border-radius: 50%;
+  padding: 2rem;
+  border: 1px solid var(--card-border);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  min-height: 220px;
+  transform: scale(1.2);
+}
+
+.table::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: radial-gradient(circle, 
+    var(--card-bg) 0%, 
+    rgba(100, 108, 255, 0.05) 70%, 
+    rgba(100, 108, 255, 0.1) 100%);
+  z-index: -1;
+}
+
+.table h3 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+/* Добавим стиль для колоды на столе */
+.table-center {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.table-deck {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.table-deck-count {
+  font-size: 0.85rem;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 0.2rem 0.6rem;
+  border-radius: 10px;
+  margin-top: 0.2rem;
+}
+
+.table-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  justify-content: center;
+  width: 100%;
+  margin-top: 30px;
+  min-height: 90px;
+}
+
+/* Размещение игроков */
+.players-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.player {
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 1rem;
+  min-width: 180px;
+  text-align: center;
+  border: 1px solid var(--card-border);
+  transition: all 0.3s;
+}
+
+.player:nth-child(1) {
+  grid-area: player;
+}
+
+.player:nth-child(2) {
+  grid-area: opponent2;
+}
+
+.player:nth-child(3) {
+  grid-area: opponent3;
+}
+
+.player.active {
+  border-color: var(--accent-color);
+  background: rgba(100, 108, 255, 0.1);
+  box-shadow: 0 0 15px rgba(100, 108, 255, 0.2);
+}
+
+.player h3 {
+  margin-top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 0.8rem;
+}
+
+.player-icon {
+  font-size: 1.2rem;
+  background: var(--card-bg);
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.hand {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.stumps {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.card {
+  width: 50px;
+  height: 75px;
+  background: white;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.stump {
+  opacity: 0.7;
+  transform: rotate(90deg);
+}
+
+.deck {
+  grid-area: deck;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.deck h3 {
+  margin-bottom: 0.5rem;
+}
+
+.deck-card {
+  background: linear-gradient(135deg, #242424, #3a3a3a);
+  color: var(--accent-color);
+  cursor: pointer;
+  transform: scale(1.2);
+}
+
+[data-theme='light'] .deck-card {
+  background: linear-gradient(135deg, #e0e0e0, #c0c0c0);
+}
+
+.card[data-suit="♥"], .card[data-suit="♦"] {
+  color: #ff6464;
+}
+
+/* Стили для области управления игрой */
+.game-controls {
+  grid-area: controls;
+  text-align: center;
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.btn-start {
+  background: linear-gradient(45deg, var(--accent-color), var(--accent-hover));
+  color: white;
+  border: none;
+  padding: 0.8em 1.8em;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 4px 12px rgba(100, 108, 255, 0.3);
+}
+
+.btn-start:hover {
+  background: linear-gradient(45deg, var(--accent-hover), var(--accent-color));
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(100, 108, 255, 0.4);
+  color: white;
+}
+
+.btn-back {
+  background: transparent;
+  border: 1px solid var(--button-border);
+  color: var(--button-text);
+  padding: 0.8em 1.8em;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.btn-back:hover {
+  border-color: var(--accent-color);
+  color: var(--accent-color);
+  background: var(--button-hover-bg);
+  transform: translateY(-2px);
+}
+
+.btn-take {
+  background: rgba(255, 100, 100, 0.2);
+  border: 1px solid rgba(255, 100, 100, 0.5);
+  color: var(--danger-color);
+  padding: 0.8em 1.8em;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.btn-take:hover {
+  background: rgba(255, 100, 100, 0.3);
+  transform: translateY(-2px);
+}
+
+/* Адаптивные стили */
+@media (max-width: 768px) {
+  .game-header {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+  
+  .game-info {
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  
+  .game-board {
+    grid-template-areas:
+      "opponent2 opponent3"
+      "table table"
+      "player controls";
+    grid-template-columns: 1fr 1fr;
+  }
+  
+  .table {
+    transform: scale(1);
+  }
+}
+
+@media (max-width: 480px) {
+  .game-header h1 {
+    font-size: 1.5rem;
+  }
+  
+  .game-info p {
+    font-size: 0.9rem;
+    padding: 0.4rem 0.8rem;
+  }
+  
+  .card {
+    width: 40px;
+    height: 60px;
+    font-size: 1rem;
+  }
+  
+  .game-board {
+    grid-template-areas:
+      "opponent2"
+      "opponent3"
+      "table"
+      "player"
+      "controls";
+    grid-template-columns: 1fr;
+  }
+  
+  .btn-start, .btn-back, .btn-take {
+    width: 100%;
+    margin-top: 0.5rem;
+  }
+  
+  .game-controls {
+    flex-direction: column;
+  }
+}
+
+.circle-table {
+  position: relative;
+  width: 420px;
+  height: 420px;
+  margin: 0 auto;
+  background: radial-gradient(circle at 50% 50%, #eaf3ff 60%, #b3cfff 100%);
+  border-radius: 50%;
+  box-shadow: 0 0 60px 0 #b3cfff55;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.table-center {
+  position: absolute;
+  left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
+  width: 180px;
+  height: 180px;
+  background: linear-gradient(135deg, #d0e6ff 0%, #b3cfff 100%);
+  border-radius: 50%;
+  box-shadow: 0 0 30px 0 #b3cfff55;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+.table-deck {
+  position: absolute;
+  left: 50%; top: 30%;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.table-deck .card {
+  background: linear-gradient(135deg, #7ecbff 0%, #b3cfff 100%);
+  color: #fff;
+  box-shadow: 0 0 10px #7ecbff55;
+  border: 2px solid #7ecbff;
+}
+
+.table-deck-count {
+  font-size: 0.85rem;
+  background: #7ecbff33;
+  color: #2a4d7a;
+  padding: 0.2rem 0.6rem;
+  border-radius: 10px;
+  margin-top: 0.2rem;
+}
+
+.table-cards {
+  margin-top: 60px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  justify-content: center;
+  width: 100%;
+  min-height: 60px;
+}
+
+.player-circle {
+  position: absolute;
+  width: 110px;
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 3;
+  transition: box-shadow 0.3s;
+}
+
+.player-circle.active {
+  box-shadow: 0 0 20px 0 #7ecbff99;
+  background: #eaf3ffcc;
+  border-radius: 16px;
+}
+
+.player-avatar {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, #7ecbff 0%, #b3cfff 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  margin-bottom: 0.2rem;
+  box-shadow: 0 2px 8px #7ecbff44;
+}
+
+.player-name {
+  font-size: 1rem;
+  color: #2a4d7a;
+  margin-bottom: 0.2rem;
+  font-weight: 600;
+}
+
+.hand, .stumps {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.2rem;
+}
+
+.card {
+  width: 38px;
+  height: 56px;
+  background: linear-gradient(135deg, #fff 0%, #e0eaff 100%);
+  color: #2a4d7a;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1.1rem;
+  box-shadow: 0 2px 5px #b3cfff33;
+  border: 1.5px solid #b3cfff;
+  transition: all 0.2s;
+}
+
+.card.stump {
+  opacity: 0.7;
+  transform: rotate(90deg);
+  background: linear-gradient(135deg, #b3cfff 0%, #e0eaff 100%);
+}
+
+.btn-start, .btn-back, .btn-take {
+  background: linear-gradient(90deg, #7ecbff 0%, #b3cfff 100%, #7ecbff 100%);
+  color: #fff;
+  border: none;
+  padding: 0.8em 1.8em;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 4px 16px #7ecbff44;
+  margin: 0.5rem 0;
+  background-size: 200% 200%;
+  animation: gradient-move 2s linear infinite;
+}
+
+@keyframes gradient-move {
+  0% { background-position: 0% 50%;}
+  50% { background-position: 100% 50%;}
+  100% { background-position: 0% 50%;}
+}
+
+.btn-start:hover, .btn-back:hover, .btn-take:hover {
+  filter: brightness(1.1) drop-shadow(0 0 8px #7ecbff88);
+  transform: translateY(-2px) scale(1.04);
+}
+
+.players-select {
+  margin-bottom: 1.5rem;
+  font-size: 1.1rem;
+  color: #2a4d7a;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.players-select select {
+  font-size: 1.1rem;
+  border-radius: 8px;
+  border: 1.5px solid #7ecbff;
+  padding: 0.2em 0.8em;
+  background: #eaf3ff;
+  color: #2a4d7a;
+  outline: none;
+  transition: border 0.2s;
+}
+
+.players-select select:focus {
+  border: 2px solid #7ecbff;
+}
+
+.game-header h1 {
+  color: #2a4d7a;
+  text-shadow: 0 2px 8px #b3cfff55;
+}
+
+.game-info p {
+  background: #eaf3ff;
+  color: #2a4d7a;
+  border: 1.5px solid #b3cfff;
+}
+
+.game-message {
+  background: #eaf3ff;
+  color: #2a4d7a;
+  border: 1.5px solid #b3cfff;
+  box-shadow: 0 2px 8px #b3cfff33;
+}
+
+@media (max-width: 600px) {
+  .circle-table {
+    width: 98vw;
+    height: 98vw;
+    min-width: 260px;
+    min-height: 260px;
+    max-width: 99vw;
+    max-height: 99vw;
+  }
+  .table-center {
+    width: 110px;
+    height: 110px;
+  }
+  .player-circle {
+    width: 70px;
+    min-height: 80px;
+  }
+  .player-avatar {
+    width: 32px;
+    height: 32px;
+    font-size: 1.2rem;
+  }
+  .card {
+    width: 26px;
+    height: 38px;
+    font-size: 0.8rem;
+  }
+} 
