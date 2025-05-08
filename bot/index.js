@@ -71,7 +71,7 @@ if (BOT_TOKEN) {
     bot = new TelegramBot(BOT_TOKEN, { polling: true });
 
     // URL для мини-приложения
-    const webAppUrl = WEB_APP_URL || 'https://telegram-razgildiay.onrender.com';
+    const webAppUrl = WEB_APP_URL || 'https://pdr-card.onrender.com';
     console.log(`Используется WEB_APP_URL: ${webAppUrl}`);
 
     // Обработка команды /start
