@@ -1,6 +1,6 @@
 import TelegramBot from 'node-telegram-bot-api';
 import express from 'express';
-import { BOT_TOKEN, PORT } from './config.js';
+import { BOT_TOKEN, PORT, WEB_APP_URL } from './config.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -12,7 +12,7 @@ const __dirname = path.dirname(__filename);
 console.log('Запуск приложения...');
 console.log(`PORT: ${PORT}`);
 console.log(`BOT_TOKEN присутствует: ${BOT_TOKEN ? 'Да' : 'Нет'}`);
-console.log(`WEB_APP_URL: ${process.env.WEB_APP_URL || 'не указан'}`);
+console.log(`WEB_APP_URL: ${WEB_APP_URL || 'не указан'}`);
 
 // Создаем веб-сервер для Render
 const app = express();
@@ -28,7 +28,12 @@ try {
 // Основной маршрут для веб-сервера
 app.get('/', (req, res) => {
   console.log('Получен запрос на главную страницу');
-  res.send('Бот работает!');
+  try {
+    res.sendFile(path.join(__dirname, '../dist/index.html'));
+  } catch (error) {
+    console.error('Ошибка при отправке index.html:', error);
+    res.send('Бот работает!');
+  }
 });
 
 // Маршрут для проверки здоровья
@@ -37,15 +42,20 @@ app.get('/health', (req, res) => {
   res.status(200).send('OK');
 });
 
-// Маршрут для обработки всех остальных запросов (SPA)
-app.get('*', (req, res) => {
-  console.log(`Получен запрос на: ${req.url}`);
+// Конкретные маршруты для Telegram Web App
+app.get('/app', (req, res) => {
+  console.log('Получен запрос на страницу приложения');
   try {
     res.sendFile(path.join(__dirname, '../dist/index.html'));
   } catch (error) {
     console.error('Ошибка при отправке index.html:', error);
     res.status(500).send('Внутренняя ошибка сервера');
   }
+});
+
+app.get('/assets/:file', (req, res) => {
+  console.log(`Запрос статического файла: ${req.params.file}`);
+  res.sendStatus(404);
 });
 
 // Запускаем сервер
@@ -61,7 +71,7 @@ if (BOT_TOKEN) {
     bot = new TelegramBot(BOT_TOKEN, { polling: true });
 
     // URL для мини-приложения
-    const webAppUrl = process.env.WEB_APP_URL || 'https://your-render-app.onrender.com';
+    const webAppUrl = WEB_APP_URL || 'https://telegram-razgildiay.onrender.com';
     console.log(`Используется WEB_APP_URL: ${webAppUrl}`);
 
     // Обработка команды /start

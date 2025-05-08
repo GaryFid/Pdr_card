@@ -8,7 +8,8 @@
 2. Создайте файл `.env` в корне проекта с содержимым:
    ```
    TELEGRAM_BOT_TOKEN=ваш_токен_бота
-   PORT=3000
+   PORT=10000
+   WEB_APP_URL=https://telegram-razgildiay.onrender.com
    ```
 
 ## Локальный запуск
@@ -25,6 +26,8 @@ npm run bot
 3. Создайте новый Web Service, указав этот репозиторий.
 4. Настройте переменные окружения:
    - `TELEGRAM_BOT_TOKEN` - токен вашего бота
+   - `PORT` - порт для запуска сервера (рекомендуется 10000 для Render)
+   - `WEB_APP_URL` - URL вашего приложения на Render (например, https://telegram-razgildiay.onrender.com)
 5. Нажмите кнопку "Create Web Service".
 
 После успешного деплоя ваш бот будет работать в режиме веб-хука.
