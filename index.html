@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" data-theme="light">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
@@ -7,11 +7,65 @@
     <meta name="MobileOptimized" content="176" />
     <meta name="HandheldFriendly" content="True" />
     <meta name="robots" content="noindex,nofollow" />
+    <meta name="theme-color" content="#e0eaff" />
+    <meta name="description" content="Разгильдяй - популярная карточная игра в Telegram Mini App" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <title>Разгильдяй - карточная игра</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+      /* Базовые стили для загрузки */
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Roboto', sans-serif;
+        background: linear-gradient(135deg, #e0eaff 0%, #b3cfff 100%);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #2a4d7a;
+      }
+      
+      [data-theme="dark"] body {
+        background: linear-gradient(135deg, #1a2234 0%, #2a364b 100%);
+        color: #e0eaff;
+      }
+      
+      .loading {
+        text-align: center;
+      }
+      
+      .loading-title {
+        font-size: 1.8rem;
+        margin-bottom: 1rem;
+        font-weight: 700;
+      }
+      
+      .loading-spinner {
+        width: 50px;
+        height: 50px;
+        border: 5px solid rgba(126, 203, 255, 0.3);
+        border-radius: 50%;
+        border-top-color: #7ecbff;
+        animation: spin 1s ease-in-out infinite;
+        margin: 0 auto;
+      }
+      
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
+    </style>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <div class="loading">
+        <div class="loading-title">Разгильдяй</div>
+        <div class="loading-spinner"></div>
+        <p>Загрузка игры...</p>
+      </div>
+    </div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
