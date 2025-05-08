@@ -1,13 +1,12 @@
 import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import config from './config.js';
+import { PORT } from './config.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-const PORT = process.env.PORT || 10000;
 
 // Middleware для статических файлов
 app.use(express.static(path.join(__dirname, '../dist')));
@@ -42,5 +41,4 @@ app.get('/settings', (req, res) => {
 // Запуск сервера
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
-  console.log(`Environment: ${config.NODE_ENV}`);
 });
